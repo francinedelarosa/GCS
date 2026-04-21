@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Students - UNITYCARE</title>
+
+<link rel="stylesheet" href="styles.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+
+/* TOP BAR */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+}
+
+/* SEARCH */
+.search-input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  width: 250px;
+}
+
+/* LIST */
+.list-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ITEM */
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--card);
+  transition: 0.2s;
+}
+
+.list-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+}
+
+/* LEFT */
+.student-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #34699A;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+/* TAGS */
+.tag {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+.tag.stable { background: #e7f7ee; color: #1e7a3b; }
+.tag.monitor { background: #fff4d6; color: #8a6a00; }
+.tag.high { background: #ffe2e2; color: #a10000; }
+
+/* META */
+.student-meta {
+  text-align: right;
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+/* BUTTON */
+.btn-small {
+  margin-top: 6px;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 8px;
+  background: #1F6FEB;
+  color: white;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.btn-small:hover {
+  opacity: 0.85;
+}
+
+/* COUNT BADGE */
+.count-badge {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+}
+
+/* SETTINGS */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.settings-wrapper {
+  position: relative;
+}
+
+.settings-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.settings-btn:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.settings-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 45px;
+  width: 160px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  z-index: 999;
+  flex-direction: column;
+}
+
+.settings-dropdown a,
+.settings-dropdown button {
+  padding: 10px;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.settings-dropdown a:hover,
+.settings-dropdown button:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+
+  <!-- HEADER -->
+  <div class="sidebar-header">
+
+    <div class="logo">
+      <img src="logo.png" alt="UNITYCARE Logo">
+      <h3>UNITYCARE</h3>
+    </div>
+
+    <div class="settings-wrapper">
+      <button class="settings-btn" onclick="toggleSettings()">
+        <i class="fa fa-gear"></i>
+      </button>
+
+      <div class="settings-dropdown" id="settingsMenu">
+        <a href="cprofile.html"><i class="fa fa-user"></i> Profile</a>
+        <button onclick="toggleTheme()"><i class="fa fa-moon"></i> Theme</button>
+        <button onclick="logout()"><i class="fa fa-right-from-bracket"></i> Logout</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MENU -->
+  <div class="menu">
+
+    <a href="counselor.html">
+      <i class="fa fa-gauge"></i> Dashboard
+    </a>
+
+    <p class="menu-title"><i class="fa fa-calendar"></i> Sessions</p>
+    <a href="csessions.html"><i class="fa fa-calendar-check"></i> My Sessions</a>
+    <a href="cappointments.html"><i class="fa fa-calendar-plus"></i> Appointment Requests</a>
+    <a href="cconcerns.html"><i class="fa fa-triangle-exclamation"></i> Student Concerns</a>
+
+    <p class="menu-title"><i class="fa fa-user-graduate"></i> Students</p>
+    <a href="students.html" class="active"><i class="fa fa-users"></i> My Students</a>
+
+    <p class="menu-title"><i class="fa fa-chart-line"></i> Reports</p>
+    <a href="reports.html"><i class="fa fa-file"></i> My Reports</a>
+
+    <p class="menu-title"><i class="fa fa-bullhorn"></i> Information</p>
+    <a href="cannouncements.html"><i class="fa fa-bullhorn"></i> Announcements</a>
+    <a href="creferral.html"><i class="fa fa-route"></i> Referrals</a>
+
+  </div>
+
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button class="hamburger-btn" onclick="toggleSidebar()">
+        <i class="fa fa-bars"></i>
+      </button>
+      <h2>Student Directory</h2>
+      <span id="studentCount" class="count-badge">3 Students</span>
+    </div>
+
+    <input 
+      type="text"
+      id="searchInput"
+      class="search-input"
+      placeholder="Search students..."
+      onkeyup="searchStudents()"
+    >
+
+  </div>
+
+  <!-- LIST -->
+  <div class="list-container">
+
+    <div class="list-item">
+      <div class="student-info">
+        <div class="avatar">JS</div>
+        <div>
+          <h3>Jane Smith</h3>
+          <p>Psychology • 3rd Year</p>
+          <span class="tag stable">Stable</span>
+        </div>
+      </div>
+      <div class="student-meta">
+        Last session: Apr 10<br>
+        <button class="btn-small">View Profile</button>
+      </div>
+    </div>
+
+    <div class="list-item">
+      <div class="student-info">
+        <div class="avatar">MJ</div>
+        <div>
+          <h3>Mark Johnson</h3>
+          <p>Education • 2nd Year</p>
+          <span class="tag monitor">Monitor</span>
+        </div>
+      </div>
+      <div class="student-meta">
+        Last session: Mar 28<br>
+        <button class="btn-small">View Profile</button>
+      </div>
+    </div>
+
+    <div class="list-item">
+      <div class="student-info">
+        <div class="avatar">AC</div>
+        <div>
+          <h3>Anna Cruz</h3>
+          <p>Engineering • 4th Year</p>
+          <span class="tag high">High Concern</span>
+        </div>
+      </div>
+      <div class="student-meta">
+        Last session: Apr 02<br>
+        <button class="btn-small">View Profile</button>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+
+function searchStudents() {
+  const input = document.getElementById("searchInput").value.toLowerCase();
+  const items = document.querySelectorAll(".list-item");
+
+  items.forEach(item => {
+    item.style.display = item.innerText.toLowerCase().includes(input)
+      ? "flex"
+      : "none";
+  });
+
+  updateCount();
+}
+
+function updateCount() {
+  const visible = [...document.querySelectorAll(".list-item")]
+    .filter(i => i.style.display !== "none").length;
+
+  document.getElementById("studentCount").innerText = visible + " Students";
+}
+
+function toggleSettings() {
+  const menu = document.getElementById("settingsMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  html.setAttribute("data-theme",
+    html.getAttribute("data-theme") === "dark" ? "light" : "dark"
+  );
+}
+
+function logout() {
+  window.location.href = "role.html";
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reports - Counselor</title>
+
+<link rel="stylesheet" href="styles.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+/* SETTINGS DROPDOWN */
+.settings-wrapper {
+  position: relative;
+}
+
+.settings-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.settings-btn:hover {
+  background: rgba(0,0,0,0.06);
+}
+
+.settings-dropdown {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 45px;
+  width: 160px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  z-index: 999;
+  flex-direction: column;
+}
+
+.settings-dropdown a,
+.settings-dropdown button {
+  padding: 10px;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.settings-dropdown a:hover,
+.settings-dropdown button:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+
+  <!-- HEADER -->
+  <div class="sidebar-header">
+
+    <div class="logo">
+      <img src="logo.png" alt="UNITYCARE Logo">
+      <h3>UNITYCARE</h3>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="settings-wrapper">
+      <button class="settings-btn" onclick="toggleSettings()">
+        <i class="fa fa-gear"></i>
+      </button>
+
+      <div class="settings-dropdown" id="settingsMenu">
+
+        <a href="cprofile.html">
+          <i class="fa fa-user"></i> Profile
+        </a>
+
+        <button onclick="toggleTheme()">
+          <i class="fa fa-moon"></i> Dark Mode
+        </button>
+
+        <button onclick="logout()">
+          <i class="fa fa-right-from-bracket"></i> Logout
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MENU -->
+  <div class="menu">
+
+    <a href="counselor.html">
+      <i class="fa fa-gauge"></i> Dashboard
+    </a>
+
+    <p class="menu-title"><i class="fa fa-calendar"></i> Sessions</p>
+    <a href="csessions.html"><i class="fa fa-calendar-check"></i> My Sessions</a>
+    <a href="cappointments.html"><i class="fa fa-calendar-plus"></i> Appointment Requests</a>
+    <a href="cconcerns.html"><i class="fa fa-triangle-exclamation"></i> Student Concerns</a>
+
+    <p class="menu-title"><i class="fa fa-user-graduate"></i> Students</p>
+    <a href="students.html"><i class="fa fa-users"></i> My Students</a>
+
+    <p class="menu-title"><i class="fa fa-chart-line"></i> Reports</p>
+    <a href="reports.html" class="active"><i class="fa fa-file"></i> My Reports</a>
+
+    <p class="menu-title"><i class="fa fa-bullhorn"></i> Information</p>
+    <a href="cannouncements.html"><i class="fa fa-bullhorn"></i> Announcements</a>
+    <a href="creferral.html"><i class="fa fa-route"></i> Referrals</a>
+
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="topbar">
+    <button class="hamburger-btn" onclick="toggleSidebar()">
+      <i class="fa fa-bars"></i>
+    </button>
+    <h2>Reports</h2>
+  </div>
+
+  <p class="muted">Counseling summaries and student progress reports</p>
+
+  <div class="grid">
+
+    <div class="card">
+      <h3>Monthly Report - April</h3>
+      <p>15 students attended sessions</p>
+      <p>3 high priority cases</p>
+      <button class="btn">Download</button>
+    </div>
+
+    <div class="card">
+      <h3>Wellness Summary</h3>
+      <p>Average wellness score improved</p>
+      <button class="btn">View Details</button>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+function toggleSettings() {
+  const menu = document.getElementById("settingsMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  html.setAttribute(
+    "data-theme",
+    html.getAttribute("data-theme") === "dark" ? "light" : "dark"
+  );
+}
+
+function logout() {
+  window.location.href = "role.html";
+}
+</script>
+
+</body>
+</html>

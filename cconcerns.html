@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Concerns - Counselor</title>
+
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="counselor-concerns.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+/* TOP LOGO ROW WITH SETTINGS ICON */
+.sidebar-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+/* ICON BUTTON (SETTINGS) */
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  color: inherit;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.icon-btn:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* SETTINGS DROPDOWN */
+.settings-menu {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 60px;
+  right: 10px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  width: 160px;
+  z-index: 999;
+}
+
+.settings-menu button,
+.settings-menu a {
+  padding: 10px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.settings-menu button:hover,
+.settings-menu a:hover {
+  background: #f2f2f2;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+
+  <!-- LOGO + SETTINGS ICON TOP ROW -->
+  <div class="sidebar-top">
+
+    <div class="logo">
+      <img src="logo.png" alt="UNITYCARE Logo">
+      <h3>UNITYCARE</h3>
+    </div>
+
+    <!-- SETTINGS ICON BUTTON (TOP RIGHT) -->
+    <button class="icon-btn" onclick="toggleSettings()">
+      <i class="fa fa-gear"></i>
+    </button>
+
+    <!-- DROPDOWN -->
+    <div class="settings-menu" id="settingsMenu">
+      <a href="cprofile.html"><i class="fa fa-user"></i> Profile</a>
+      <button onclick="toggleTheme()"><i class="fa fa-moon"></i> Theme</button>
+      <button onclick="logout()"><i class="fa fa-right-from-bracket"></i> Logout</button>
+    </div>
+
+  </div>
+
+  <div class="menu">
+
+    <a href="counselor.html">
+      <i class="fa fa-gauge"></i> Dashboard
+    </a>
+
+    <p class="menu-title">
+      <i class="fa fa-calendar"></i> Sessions
+    </p>
+
+    <a href="csessions.html">
+      <i class="fa fa-calendar-check"></i> My Sessions
+    </a>
+
+    <a href="cappointments.html">
+      <i class="fa fa-calendar-plus"></i> Appointment Requests
+    </a>
+
+    <a href="cconcerns.html" class="active">
+      <i class="fa fa-triangle-exclamation"></i> Student Concerns
+    </a>
+
+    <p class="menu-title">
+      <i class="fa fa-user-graduate"></i> Students
+    </p>
+
+    <a href="students.html">
+      <i class="fa fa-users"></i> My Students
+    </a>
+
+    <p class="menu-title">
+      <i class="fa fa-chart-line"></i> Reports
+    </p>
+
+    <a href="reports.html">
+      <i class="fa fa-file"></i> My Reports
+    </a>
+
+    <p class="menu-title">
+      <i class="fa fa-bullhorn"></i> Information
+    </p>
+
+    <a href="cannouncements.html">
+      <i class="fa fa-bullhorn"></i> Announcements
+    </a>
+
+    <a href="creferral.html">
+      <i class="fa fa-route"></i> Referrals
+    </a>
+
+  </div>
+
+  <button class="logout-btn" onclick="logout()">
+    <i class="fa fa-right-from-bracket"></i> Logout
+  </button>
+
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="topbar">
+    <h2>Student Concerns</h2>
+  </div>
+
+  <p class="muted">Review and respond to student submissions</p>
+
+  <div id="concernList" class="grid"></div>
+
+</main>
+
+<script>
+
+function toggleSettings() {
+  const menu = document.getElementById("settingsMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute("data-theme");
+  html.setAttribute("data-theme", current === "dark" ? "light" : "dark");
+}
+
+function logout() {
+  window.location.href = "role.html";
+}
+
+let concerns = JSON.parse(localStorage.getItem("concerns")) || [];
+
+function saveData() {
+  localStorage.setItem("concerns", JSON.stringify(concerns));
+}
+
+function loadConcerns() {
+  const container = document.getElementById("concernList");
+  container.innerHTML = "";
+
+  if (!concerns.length) {
+    container.innerHTML = "<p class='muted'>No concerns submitted yet.</p>";
+    return;
+  }
+
+  concerns.forEach((c, index) => {
+    const div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <h3><i class="fa fa-user"></i> ${c.name || "Student"}</h3>
+      <p><b>Concern:</b> ${c.message || ""}</p>
+      <small>${c.date || ""}</small>
+
+      ${c.reply ? `
+        <div class="reply-thread">
+          <b>Your Reply:</b>
+          <p>${c.reply}</p>
+        </div>
+      ` : ""}
+
+      <div class="reply-box">
+        <textarea id="reply-${index}" placeholder="Write your response..."></textarea>
+        <button class="reply-btn" onclick="reply(${index})">Send Reply</button>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function reply(index) {
+  const text = document.getElementById(`reply-${index}`).value.trim();
+
+  if (!text) {
+    alert("Reply cannot be empty.");
+    return;
+  }
+
+  concerns[index].reply = text;
+  saveData();
+  loadConcerns();
+}
+
+loadConcerns();
+
+</script>
+
+</body>
+</html>

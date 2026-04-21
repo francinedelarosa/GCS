@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register | UNITYCARE</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+
+<body class="auth-body">
+
+<div class="auth-container">
+
+  <!-- LEFT -->
+  <section class="auth-left">
+
+    <div class="auth-left-overlay"></div>
+
+    <div class="auth-brand">
+      <img class="auth-brand-logo" src="logo.png">
+      <h1 class="auth-brand-title">UNITYCARE</h1>
+      <p class="auth-brand-subtitle">Create your account</p>
+    </div>
+
+  </section>
+
+  <!-- RIGHT -->
+  <section class="auth-right">
+
+    <div class="auth-box">
+
+      <h2 class="auth-title">Register</h2>
+
+      <p class="auth-subtitle">
+        Join UNITYCARE today
+      </p>
+
+      <form class="auth-form" onsubmit="event.preventDefault(); register();">
+        
+      
+        <label>Student Number</label>
+        <input type="text" id="studno" class="auth-input" required>
+        
+        <label>Full Name</label>
+        <input type="text" id="name" class="auth-input" required>
+
+        <label>Email</label>
+        <input type="email" id="email" class="auth-input" required>
+
+          <!-- TEMP PASSWORD BOX <label class="auth-label">Email</label>
+        <input class="auth-input" id="email" type="email">
+
+        <label class="auth-label">Password</label>
+        <input class="auth-input" id="password" type="password">
+
+        <label class="auth-label">Confirm Password</label>
+        <input class="auth-input" id="confirmPassword" type="password"> -->
+
+        <div class="auth-captcha">
+          <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY_HERE"></div>
+        </div>
+
+        <button type="submit" class="auth-btn">
+          Register
+        </button>
+
+        <div class="auth-message" id="error"></div>
+
+      </form>
+
+      <!-- TEMP PASSWORD BOX -->
+      <div id="tempPasswordBox" class="auth-temp-box">
+
+        <strong class="auth-temp-title">
+          Temporary Password:
+        </strong>
+
+        <p id="tempPassword" class="auth-temp-password"></p>
+
+        <small class="auth-temp-note">
+          Please save this password before continuing.
+        </small>
+
+      </div>
+
+      <!-- FOOTER -->
+      <div class="auth-footer">
+
+        <div class="auth-footer-text">
+          Already have an account?
+        </div>
+
+        <a class="auth-footer-link" href="login.html">
+          Login here
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+function generateTempPassword() {
+  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$";
+  let pass = "";
+  for (let i = 0; i < 10; i++) {
+    pass += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return pass;
+}
+
+function register() {
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const confirmPassword = document.getElementById("confirmPassword").value.trim();
+  const error = document.getElementById("error");
+
+  error.style.color = "red";
+
+  if (!name || !email || !password || !confirmPassword) {
+    error.textContent = "Please fill in all fields.";
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    error.textContent = "Passwords do not match.";
+    return;
+  }
+
+  const captcha = grecaptcha.getResponse();
+  if (!captcha) {
+    error.textContent = "Please complete reCAPTCHA.";
+    return;
+  }
+
+  const tempPassword = generateTempPassword();
+
+  document.getElementById("tempPasswordBox").style.display = "block";
+  document.getElementById("tempPassword").textContent = tempPassword;
+
+  localStorage.setItem("tempPassword", tempPassword);
+  localStorage.setItem("registeredEmail", email);
+
+  error.style.color = "green";
+  error.textContent = "Account created successfully! Redirecting...";
+
+  setTimeout(() => {
+    window.location.href = "login.html";
+  }, 3000);
+}
+</script>
+
+</body>
+</html>

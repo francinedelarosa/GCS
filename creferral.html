@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Referrals - Counselor</title>
+
+<link rel="stylesheet" href="styles.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<style>
+/* SETTINGS FIX */
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.settings-wrapper {
+  position: relative;
+}
+
+.settings-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--text);
+}
+
+.settings-dropdown {
+  position: absolute;
+  right: 0;
+  top: 35px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: none;
+  flex-direction: column;
+  min-width: 160px;
+  z-index: 1000;
+}
+
+.settings-dropdown a,
+.settings-dropdown button {
+  padding: 10px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.settings-dropdown a:hover,
+.settings-dropdown button:hover {
+  background: rgba(0,0,0,0.05);
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+
+  <!-- HEADER -->
+  <div class="sidebar-header">
+
+    <div class="logo">
+      <img src="logo.png" alt="UNITYCARE Logo">
+      <h3>UNITYCARE</h3>
+    </div>
+
+    <div class="settings-wrapper">
+
+      <button class="settings-btn" onclick="toggleSettings()">
+        <i class="fa fa-gear"></i>
+      </button>
+
+      <div class="settings-dropdown" id="settingsMenu">
+
+        <a href="cprofile.html">
+          <i class="fa fa-user"></i> Profile
+        </a>
+
+        <button onclick="toggleTheme()">
+          <i class="fa fa-moon"></i> Theme
+        </button>
+
+        <button onclick="logout()">
+          <i class="fa fa-right-from-bracket"></i> Logout
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MENU -->
+  <div class="menu">
+
+    <a href="counselor.html">
+      <i class="fa fa-gauge"></i> Dashboard
+    </a>
+
+    <p class="menu-title"><i class="fa fa-calendar"></i> Sessions</p>
+    <a href="csessions.html"><i class="fa fa-calendar-check"></i> My Sessions</a>
+    <a href="cappointments.html"><i class="fa fa-calendar-plus"></i> Appointment Requests</a>
+    <a href="cconcerns.html"><i class="fa fa-triangle-exclamation"></i> Student Concerns</a>
+
+    <p class="menu-title"><i class="fa fa-user-graduate"></i> Students</p>
+    <a href="students.html"><i class="fa fa-users"></i> My Students</a>
+
+    <p class="menu-title"><i class="fa fa-chart-line"></i> Reports</p>
+    <a href="reports.html"><i class="fa fa-file"></i> My Reports</a>
+
+    <p class="menu-title"><i class="fa fa-bullhorn"></i> Information</p>
+    <a href="cannouncements.html"><i class="fa fa-bullhorn"></i> Announcements</a>
+    <a href="creferral.html" class="active"><i class="fa fa-route"></i> Referrals</a>
+
+  </div>
+
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="topbar">
+    <h2>Referral Management</h2>
+  </div>
+
+  <div class="grid">
+
+    <!-- CREATE -->
+    <div class="card">
+
+      <h3><i class="fa fa-route"></i> Create Referral</h3>
+
+      <label>Student Name</label>
+      <input id="student" placeholder="Enter student name">
+
+      <label>Concern / Reason</label>
+      <textarea id="reason" placeholder="Enter reason"></textarea>
+
+      <label>Assigned Counselor</label>
+      <input value="Dr. Maria Santos" readonly>
+
+      <label>Day</label>
+      <select id="day">
+        <option value="">Select</option>
+        <option>Monday</option>
+        <option>Tuesday</option>
+        <option>Wednesday</option>
+        <option>Thursday</option>
+        <option>Friday</option>
+      </select>
+
+      <label>Time</label>
+      <select id="time">
+        <option value="">Select</option>
+        <option>9:00 AM</option>
+        <option>10:00 AM</option>
+        <option>11:00 AM</option>
+        <option>1:00 PM</option>
+        <option>2:00 PM</option>
+      </select>
+
+      <button class="btn" onclick="createReferral()">Create Referral</button>
+
+      <p id="msg" style="margin-top:10px;"></p>
+
+    </div>
+
+    <!-- LIST -->
+    <div class="card">
+      <h3>Active Referrals</h3>
+      <div id="list"></div>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+function toggleSettings() {
+  const menu = document.getElementById("settingsMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  html.setAttribute(
+    "data-theme",
+    html.getAttribute("data-theme") === "dark" ? "light" : "dark"
+  );
+}
+
+function logout() {
+  window.location.href = "role.html";
+}
+
+/* CREATE */
+function createReferral() {
+  const student = document.getElementById("student").value;
+  const reason = document.getElementById("reason").value;
+  const day = document.getElementById("day").value;
+  const time = document.getElementById("time").value;
+  const msg = document.getElementById("msg");
+
+  if (!student || !reason || !day || !time) {
+    msg.style.color = "red";
+    msg.textContent = "Please complete all fields.";
+    return;
+  }
+
+  let data = JSON.parse(localStorage.getItem("referrals")) || [];
+
+  data.unshift({
+    student,
+    reason,
+    schedule: `${day} - ${time}`,
+    date: new Date().toLocaleString()
+  });
+
+  localStorage.setItem("referrals", JSON.stringify(data));
+
+  msg.style.color = "green";
+  msg.textContent = "Referral created successfully!";
+
+  loadReferrals();
+}
+
+/* LOAD */
+function loadReferrals() {
+  let data = JSON.parse(localStorage.getItem("referrals")) || [];
+  let list = document.getElementById("list");
+
+  list.innerHTML = "";
+
+  if (data.length === 0) {
+    list.innerHTML = "<p class='muted'>No referrals yet.</p>";
+    return;
+  }
+
+  data.forEach(r => {
+    let div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <h4>${r.student}</h4>
+      <p><b>Reason:</b> ${r.reason}</p>
+      <p><b>Schedule:</b> ${r.schedule}</p>
+      <small>${r.date}</small>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+loadReferrals();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Announcements - Counselor</title>
+
+<link rel="stylesheet" href="styles.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+<nav class="sidebar">
+
+  <div>
+
+    <!-- LOGO -->
+    <div class="logo-bar">
+
+      <div class="logo">
+        <img src="logo.png" alt="logo">
+        <h3>UNITYCARE</h3>
+      </div>
+
+      <div class="settings-wrapper">
+        <button class="settings-icon" onclick="toggleSettingsMenu()">
+          <i class="fa fa-gear"></i>
+        </button>
+
+        <div class="settings-dropdown" id="settingsDropdown">
+          <a href="cprofile.html"><i class="fa fa-user"></i> Profile</a>
+          <a href="history.html"><i class="fa fa-clock"></i> Session History</a>
+          <button onclick="toggleTheme()"><i class="fa fa-moon"></i> Theme</button>
+          <button onclick="logout()"><i class="fa fa-right-from-bracket"></i> Logout</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MENU -->
+    <div class="menu">
+
+      <a href="counselor.html">
+        <i class="fa fa-gauge"></i> Dashboard
+      </a>
+
+      <p class="menu-title"><i class="fa fa-calendar"></i> Sessions</p>
+      <a href="csessions.html"><i class="fa fa-calendar-check"></i> My Sessions</a>
+      <a href="cappointments.html"><i class="fa fa-calendar-plus"></i> Appointment Requests</a>
+      <a href="cconcerns.html"><i class="fa fa-triangle-exclamation"></i> Student Concerns</a>
+
+      <p class="menu-title"><i class="fa fa-user-graduate"></i> Students</p>
+      <a href="students.html"><i class="fa fa-users"></i> My Students</a>
+
+      <p class="menu-title"><i class="fa fa-chart-line"></i> Reports</p>
+      <a href="reports.html"><i class="fa fa-file"></i> My Reports</a>
+
+      <p class="menu-title"><i class="fa fa-bullhorn"></i> Information</p>
+      <a href="cannouncements.html" class="active">
+        <i class="fa fa-bullhorn"></i> Announcements
+      </a>
+      <a href="creferral.html"><i class="fa fa-route"></i> Referrals</a>
+
+    </div>
+
+  </div>
+
+</nav>
+
+
+<!-- MAIN -->
+<main class="main">
+
+  <div class="topbar">
+    <h2>Announcements</h2>
+  </div>
+
+  <p class="muted">Post updates for students</p>
+
+  <!-- CREATE -->
+  <div class="card">
+
+    <h3>Create Announcement</h3>
+
+    <input id="title" placeholder="Title">
+    <textarea id="message" placeholder="Message"></textarea>
+
+    <button class="btn" onclick="postAnnouncement()">Post</button>
+
+  </div>
+
+  <!-- LIST -->
+  <div class="grid" id="list"></div>
+
+</main>
+
+<script>
+
+function toggleSettingsMenu(){
+  const menu = document.getElementById("settingsDropdown");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+function toggleTheme(){
+  const html = document.documentElement;
+  html.setAttribute(
+    "data-theme",
+    html.getAttribute("data-theme") === "light" ? "dark" : "light"
+  );
+}
+
+function logout(){
+  window.location.href = "role.html";
+}
+
+/* CLOSE DROPDOWN ON CLICK OUTSIDE */
+document.addEventListener("click", function(e) {
+  const dropdown = document.getElementById("settingsDropdown");
+  const btn = document.querySelector(".settings-icon");
+
+  if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+    dropdown.style.display = "none";
+  }
+});
+
+/* =========================
+   ANNOUNCEMENTS SYSTEM
+========================= */
+
+function postAnnouncement(){
+  let title = document.getElementById("title").value.trim();
+  let message = document.getElementById("message").value.trim();
+
+  if(!title || !message){
+    alert("Please fill in both title and message.");
+    return;
+  }
+
+  let data = JSON.parse(localStorage.getItem("announcements")) || [];
+
+  data.unshift({
+    title,
+    message,
+    date: new Date().toLocaleString()
+  });
+
+  localStorage.setItem("announcements", JSON.stringify(data));
+
+  document.getElementById("title").value = "";
+  document.getElementById("message").value = "";
+
+  load();
+}
+
+function load(){
+  let data = JSON.parse(localStorage.getItem("announcements")) || [];
+  let list = document.getElementById("list");
+
+  list.innerHTML = "";
+
+  if(data.length === 0){
+    list.innerHTML = "<p class='muted'>No announcements yet.</p>";
+    return;
+  }
+
+  data.forEach(a => {
+    let div = document.createElement("div");
+    div.className = "card";
+
+    div.innerHTML = `
+      <h3>${a.title}</h3>
+      <p>${a.message}</p>
+      <small class="muted">${a.date}</small>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+load();
+
+</script>
+
+
+</body>
+</html>

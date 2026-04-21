@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - UNITYCARE</title>
+
+<link rel="stylesheet" href="styles.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+<nav class="sidebar">
+
+  <div>
+
+    <!-- LOGO -->
+    <div class="logo-bar">
+
+      <div class="logo">
+        <img src="logo.png" alt="logo">
+        <h3>UNITYCARE</h3>
+      </div>
+
+      <div class="settings-wrapper">
+        <button class="settings-icon" onclick="toggleSettingsMenu()">
+          <i class="fa fa-gear"></i>
+        </button>
+
+        <div class="settings-dropdown" id="settingsDropdown">
+          <a href="profile.html"><i class="fa fa-user"></i> Profile</a>
+          <a href="history.html"><i class="fa fa-clock"></i> Session History</a>
+          <button onclick="toggleTheme()"><i class="fa fa-moon"></i> Theme</button>
+          <button onclick="logout()"><i class="fa fa-right-from-bracket"></i> Logout</button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MENU -->
+    <div class="menu">
+
+      <a href="admin.html" class="active">
+        <i class="fa fa-gauge"></i> Dashboard
+      </a>
+
+      <p class="menu-title">MANAGEMENT</p>
+
+      <a href="admin-users.html"><i class="fa fa-users"></i> Users</a>
+      <a href="admin-sessions.html"><i class="fa fa-calendar"></i> Sessions</a>
+      <a href="admin-announcements.html"><i class="fa fa-bullhorn"></i> Announcements</a>
+
+      <p class="menu-title">SYSTEM</p>
+
+      <a href="admin-reports.html"><i class="fa fa-chart-line"></i> Reports</a>
+
+    </div>
+
+  </div>
+
+</nav>
+
+<main class="main">
+
+  <header class="topbar">
+    <button class="hamburger-btn" onclick="toggleSidebar()">
+      <i class="fa fa-bars"></i>
+    </button>
+    <h2>Admin Dashboard</h2>
+  </header>
+
+  <section class="grid">
+
+    <div class="card">
+      <h3><i class="fa fa-users"></i> Total Users</h3>
+      <h2>245</h2>
+      <p class="muted">All registered accounts</p>
+    </div>
+
+    <div class="card">
+      <h3><i class="fa fa-user-graduate"></i> Total Students</h3>
+      <h2>180</h2>
+      <p class="muted">Active students</p>
+    </div>
+
+    <div class="card">
+      <h3><i class="fa fa-user-tie"></i> Total Counselors</h3>
+      <h2>15</h2>
+      <p class="muted">Registered counselors</p>
+    </div>
+
+    <div class="card">
+      <h3><i class="fa fa-calendar"></i> Total Sessions</h3>
+      <h2>128</h2>
+      <p class="muted">All counseling sessions</p>
+    </div>
+
+    <div class="card">
+      <h3><i class="fa fa-calendar-check"></i> Total Appointments</h3>
+      <h2>96</h2>
+      <p class="muted">Booked appointments</p>
+    </div>
+
+  </section>
+
+</main>
+
+<script>
+function toggleSettingsMenu() {
+  const menu = document.getElementById("settingsDropdown");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  html.setAttribute(
+    "data-theme",
+    html.getAttribute("data-theme") === "light" ? "dark" : "light"
+  );
+}
+
+function toggleSidebar() {
+  const sidebar = document.querySelector(".sidebar");
+  sidebar.classList.toggle("open");
+}
+
+function logout() {
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
